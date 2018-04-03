@@ -36,28 +36,28 @@ def do_deploy(archive_path):
     '''
         deploys static web packages to servers listed in decorator
     '''
-    if os.path.isfile(archive_path) is False:
-        return False
-
-    arch_name = archive_path.split('/')[-1]
-    fo.put(archive_path, "/tmp/{}".format(arch_name))
-    file_name = arch_name.split(".")[0]
-    fo.run("mkdir -p /data/web_static/releases/{}".format(
-        file_name))
-    fo.run(
-        "tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(
-            arch_name, file_name))
-    fo.run("rm -rf /tmp/{}".format(arch_name))
-    s = ("mv /data/web_static/releases/{}/web_static/*"
-         " /data/web_static/releases/{}/".format(
-             file_name, file_name))
-    fo.run(s)
-    fo.run(
-        "rm -rf /data/web_static/releases/{}/web_static".format(
+    if os.path.isfile(archive_path):
+        arch_name = archive_path.split('/')[-1]
+        fo.put(archive_path, "/tmp/{}".format(arch_name))
+        file_name = arch_name.split(".")[0]
+        fo.run("mkdir -p /data/web_static/releases/{}".format(
             file_name))
-    fo.run("rm -rf /data/web_static/current")
-    fo.run(
-        "ln -s /data/web_static/releases/{}/ /data/web_static/current"
-        .format(file_name))
-    print("New version deployed!")
-    return True
+        fo.run(
+            "tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(
+                arch_name, file_name))
+        fo.run("rm -rf /tmp/{}".format(arch_name))
+        s = ("mv /data/web_static/releases/{}/web_static/*"
+            " /data/web_static/releases/{}/".format(
+                file_name, file_name))
+        fo.run(s)
+        fo.run(
+            "rm -rf /data/web_static/releases/{}/web_static".format(
+                file_name))
+        fo.run("rm -rf /data/web_static/current")
+        fo.run(
+            "ln -s /data/web_static/releases/{}/ /data/web_static/current"
+            .format(file_name))
+        print("New version deployed!")
+        return True
+
+    return False
