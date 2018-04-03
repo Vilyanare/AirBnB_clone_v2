@@ -52,19 +52,19 @@ def do_deploy(archive_path):
                 arch_name, file_name))
         rm_out2 = fo.run("rm -rf /tmp/{}".format(arch_name))
         s = ("mv /data/web_static/releases/{}/web_static/*"
-            " /data/web_static/releases/{}/".format(
-                file_name, file_name))
+             " /data/web_static/releases/{}/".format(
+                 file_name, file_name))
         mv_out = fo.run(s)
         rm_out = fo.run(
             "rm -rf /data/web_static/releases/{}/web_static".format(
                 file_name))
         rm_out3 = fo.run("rm -rf /data/web_static/current")
         ln_out = fo.sudo(
-            "ln -sf /data/web_static/releases/{}/ /data/web_static/current".format(
-                file_name))
+            "ln -sf /data/web_static/releases/{}/ /data/web_static/current"
+            .format(file_name))
         errors = [put_out.failed, mkdir_out.failed,
-                tar_out.failed, rm_out.failed, rm_out2.failed,
-                ln_out.failed, mv_out.failed, rm_out3.failed]
+                  tar_out.failed, rm_out.failed, rm_out2.failed,
+                  ln_out.failed, mv_out.failed, rm_out3.failed]
     if not any(errors):
         print("New version deployed!")
         return True
