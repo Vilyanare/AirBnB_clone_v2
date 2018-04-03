@@ -40,7 +40,9 @@ def do_deploy(archive_path):
     '''
     if os.path.isfile(archive_path) is False:
         return False
+
     print("Executing task 'deploy'")
+
     with hide('output'):
         arch_name = archive_path.split('/')[-1]
         put_out = fo.put(archive_path, "/tmp/{}".format(arch_name))
