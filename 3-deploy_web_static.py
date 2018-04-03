@@ -4,7 +4,7 @@
 '''
 from fabric import operations as fo
 from datetime import datetime
-from fabric.api import env
+from fabric.api import env, hide
 from fabric.decorators import runs_once
 import os
 
@@ -40,31 +40,31 @@ def do_deploy(archive_path):
     '''
     if os.path.isfile(archive_path) is False:
         return False
-
-    arch_name = archive_path.split('/')[-1]
-    put_out = fo.put(archive_path, "/tmp/{}".format(arch_name))
-    file_name = arch_name.split(".")[0]
-    fo.run("rm -rf /data/web_static/releases/{}/".format(file_name))
-    mkdir_out = fo.run("mkdir -p /data/web_static/releases/{}".format(
-        file_name))
-    tar_out = fo.run(
-        "tar zxvf /tmp/{} -C /data/web_static/releases/{}/".format(
-            arch_name, file_name))
-    rm_out2 = fo.run("rm -rf /tmp/{}".format(arch_name))
-    s = ("mv /data/web_static/releases/{}/web_static/*"
-         " /data/web_static/releases/{}/".format(
-             file_name, file_name))
-    mv_out = fo.run(s)
-    rm_out = fo.run(
-        "rm -rf /data/web_static/releases/{}/web_static".format(
+    with hide('output'):
+        arch_name = archive_path.split('/')[-1]
+        put_out = fo.put(archive_path, "/tmp/{}".format(arch_name))
+        file_name = arch_name.split(".")[0]
+        fo.run("rm -rf /data/web_static/releases/{}/".format(file_name))
+        mkdir_out = fo.run("mkdir -p /data/web_static/releases/{}".format(
             file_name))
-    rm_out3 = fo.run("rm -rf /data/web_static/current")
-    ln_out = fo.sudo(
-        "ln -sf /data/web_static/releases/{}/ /data/web_static/current".format(
-            file_name))
-    errors = [put_out.failed, mkdir_out.failed,
-              tar_out.failed, rm_out.failed, rm_out2.failed,
-              ln_out.failed, mv_out.failed, rm_out3.failed]
+        tar_out = fo.run(
+            "tar zxvf /tmp/{} -C /data/web_static/releases/{}/".format(
+                arch_name, file_name))
+        rm_out2 = fo.run("rm -rf /tmp/{}".format(arch_name))
+        s = ("mv /data/web_static/releases/{}/web_static/*"
+            " /data/web_static/releases/{}/".format(
+                file_name, file_name))
+        mv_out = fo.run(s)
+        rm_out = fo.run(
+            "rm -rf /data/web_static/releases/{}/web_static".format(
+                file_name))
+        rm_out3 = fo.run("rm -rf /data/web_static/current")
+        ln_out = fo.sudo(
+            "ln -sf /data/web_static/releases/{}/ /data/web_static/current".format(
+                file_name))
+        errors = [put_out.failed, mkdir_out.failed,
+                tar_out.failed, rm_out.failed, rm_out2.failed,
+                ln_out.failed, mv_out.failed, rm_out3.failed]
     if not any(errors):
         print("New version deployed!")
         return True
@@ -77,7 +77,7 @@ def deploy():
     '''
     archive = do_pack()
 
-    if archive == None:
+    if archive is None:
         return False
 
     return do_deploy(archive)
