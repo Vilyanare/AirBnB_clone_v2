@@ -4,7 +4,7 @@
 '''
 from fabric import operations as fo
 from datetime import datetime
-from fabric.api import env
+from fabric.api import env, hide
 from fabric.decorators import hosts
 import os
 
@@ -40,8 +40,6 @@ def do_deploy(archive_path):
     if os.path.isfile(archive_path) is False:
         return False
 
-    print("Executing task 'deploy'")
-
     with hide('output'):
         arch_name = archive_path.split('/')[-1]
         put_out = fo.put(archive_path, "/tmp/{}".format(arch_name))
@@ -49,7 +47,7 @@ def do_deploy(archive_path):
         mkdir_out = fo.run("mkdir -p /data/web_static/releases/{}".format(
             file_name))
         tar_out = fo.run(
-            "tar zxvf /tmp/{} -C /data/web_static/releases/{}/".format(
+            "tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(
                 arch_name, file_name))
         rm_out2 = fo.run("rm -rf /tmp/{}".format(arch_name))
         s = ("mv /data/web_static/releases/{}/web_static/*"
@@ -60,8 +58,8 @@ def do_deploy(archive_path):
             "rm -rf /data/web_static/releases/{}/web_static".format(
                 file_name))
         rm_out3 = fo.run("rm -rf /data/web_static/current")
-        ln_out = fo.sudo(
-            "ln -sf /data/web_static/releases/{}/ /data/web_static/current"
+        ln_out = fo.run(
+            "ln -s /data/web_static/releases/{}/ /data/web_static/current"
             .format(file_name))
         errors = [put_out.failed, mkdir_out.failed,
                   tar_out.failed, rm_out.failed, rm_out2.failed,
