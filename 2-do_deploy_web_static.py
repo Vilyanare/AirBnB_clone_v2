@@ -4,12 +4,12 @@
 '''
 from fabric import operations as fo
 from datetime import datetime
-from fabric.api import env, hide
-from fabric.decorators import hosts
+from fabric.api import env
 import os
 
 env.user = "ubuntu"
 env.key_filename = "~/.ssh/holberton"
+env.hosts = '107.22.148.78', '54.204.244.213'
 
 
 def do_pack():
@@ -32,7 +32,6 @@ def do_pack():
         now) if tar_out.failed is False else None
 
 
-@hosts('107.22.148.78', '54.204.244.213')
 def do_deploy(archive_path):
     '''
         deploys static web packages to servers listed in decorator
@@ -41,29 +40,24 @@ def do_deploy(archive_path):
         return False
 
     arch_name = archive_path.split('/')[-1]
-    put_out = fo.put(archive_path, "/tmp/{}".format(arch_name))
+    fo.put(archive_path, "/tmp/{}".format(arch_name))
     file_name = arch_name.split(".")[0]
-    mkdir_out = fo.run("mkdir -p /data/web_static/releases/{}".format(
+    fo.run("mkdir -p /data/web_static/releases/{}".format(
         file_name))
-    tar_out = fo.run(
+    fo.run(
         "tar -xzf /tmp/{} -C /data/web_static/releases/{}/".format(
             arch_name, file_name))
-    rm_out2 = fo.run("rm -rf /tmp/{}".format(arch_name))
+    fo.run("rm -rf /tmp/{}".format(arch_name))
     s = ("mv /data/web_static/releases/{}/web_static/*"
-            " /data/web_static/releases/{}/".format(
-                file_name, file_name))
-    mv_out = fo.run(s)
-    rm_out = fo.run(
+         " /data/web_static/releases/{}/".format(
+             file_name, file_name))
+    fo.run(s)
+    fo.run(
         "rm -rf /data/web_static/releases/{}/web_static".format(
             file_name))
-    rm_out3 = fo.run("rm -rf /data/web_static/current")
-    ln_out = fo.run(
+    fo.run("rm -rf /data/web_static/current")
+    fo.run(
         "ln -s /data/web_static/releases/{}/ /data/web_static/current"
         .format(file_name))
-    errors = [put_out.failed, mkdir_out.failed,
-                tar_out.failed, rm_out.failed, rm_out2.failed,
-                ln_out.failed, mv_out.failed, rm_out3.failed]
-    if not any(errors):
-        print("New version deployed!")
-        return True
-    return False
+    print("New version deployed!")
+    return True
