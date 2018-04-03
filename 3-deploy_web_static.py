@@ -44,7 +44,6 @@ def do_deploy(archive_path):
         arch_name = archive_path.split('/')[-1]
         put_out = fo.put(archive_path, "/tmp/{}".format(arch_name))
         file_name = arch_name.split(".")[0]
-        fo.run("rm -rf /data/web_static/releases/{}/".format(file_name))
         mkdir_out = fo.run("mkdir -p /data/web_static/releases/{}".format(
             file_name))
         tar_out = fo.run(
