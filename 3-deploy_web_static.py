@@ -11,6 +11,7 @@ import os
 env.user = "ubuntu"
 env.hosts = '107.22.148.78', '54.204.244.213'
 
+
 @runs_once
 def do_pack():
     '''
