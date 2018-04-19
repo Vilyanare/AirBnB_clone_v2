@@ -82,5 +82,4 @@ class DBStorage:
         '''
             Removes current session
         '''
-        scoped_session(sessionmaker(bind=self.__engine,
-                                 expire_on_commit=False)).remove()
+        self.__session.close()
