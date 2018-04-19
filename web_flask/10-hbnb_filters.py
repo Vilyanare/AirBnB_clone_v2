@@ -10,6 +10,7 @@ app.url_map.strict_slashes = False
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
 
+
 @app.route('/hbnb_filters')
 def state_list():
     '''
@@ -24,7 +25,9 @@ def state_list():
         cities.append(v)
     for k, v in storage.all("Amenity").items():
         amenities.append(v)
-    return render_template('10-hbnb_filters.html', cities=cities, states=states, amenities=amenities)
+    return render_template(
+        '10-hbnb_filters.html', cities=cities,
+        states=states, amenities=amenities)
 
 
 @app.teardown_appcontext

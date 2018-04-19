@@ -11,6 +11,7 @@ app.url_map.strict_slashes = False
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
 
+
 @app.route('/states')
 @app.route('/states/<id>')
 def state_list(id=None):
@@ -27,9 +28,10 @@ def state_list(id=None):
             states.append(v)
         if 'City' in k:
             cities.append(v)
-    if isinstance(id , str):
+    if isinstance(id, str):
         id = -1
-    return render_template('9-states.html', cities=cities, states=states, id=id)
+    return render_template(
+        '9-states.html', cities=cities, states=states, id=id)
 
 
 @app.teardown_appcontext

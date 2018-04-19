@@ -10,6 +10,7 @@ app.url_map.strict_slashes = False
 app.jinja_env.lstrip_blocks = True
 app.jinja_env.trim_blocks = True
 
+
 @app.route('/cities_by_states')
 def cities_by_states():
     '''
@@ -22,7 +23,10 @@ def cities_by_states():
             states.append(v)
         if 'City' in k:
             cities.append(v)
-    return render_template('8-cities_by_states.html', trim_blocks=True, states=states, cities=cities,)
+    return render_template(
+        '8-cities_by_states.html', trim_blocks=True,
+        states=states, cities=cities,)
+
 
 @app.teardown_appcontext
 def teardown_db(exception):

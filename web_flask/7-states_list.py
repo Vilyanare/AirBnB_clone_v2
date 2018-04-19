@@ -8,6 +8,7 @@ from models import storage
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 
+
 @app.route('/states_list')
 def state_list():
     '''
@@ -18,6 +19,7 @@ def state_list():
         if 'State' in k:
             states.append(v)
     return render_template('7-states_list.html', states=states)
+
 
 @app.teardown_appcontext
 def teardown_db(exception):
