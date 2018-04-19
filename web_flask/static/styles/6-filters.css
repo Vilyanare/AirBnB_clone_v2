@@ -66,17 +66,9 @@ button:hover{
     padding: 0;
     margin: 0;
 }
-.popover_list{
-    padding:0px;
-    margin:0px;
-    padding-left: 10%;
-}
-li{
-    list-style-type: none;
-    padding-bottom: 5%;
-}
-ul{
-    padding-top: 30px;
+
+ul.popover li.first {
+    padding-top: 20px;
 }
 .locations:hover >.popover{
     visibility: visible;
@@ -85,4 +77,14 @@ ul{
 
 .amenities:hover > .popover{
     visibility: visible;
+}
+
+.items li{
+    padding-top: 5px;
+    text-indent: 20%;
+    list-style: none;
+}
+
+.items li:last-child {
+    padding-bottom: 20px;
 }

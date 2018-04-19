@@ -2,10 +2,10 @@
 <html lang="en">
     <head>
         <title>Holberton School</title>
-        <link rel="stylesheet" href="styles/3-header.css">
-        <link rel="stylesheet" href="styles/4-common.css">
-        <link rel="stylesheet" href="styles/3-footer.css">
-        <link rel="stylesheet" href="styles/6-filters.css">
+        <link rel="stylesheet" href="static/styles/3-header.css">
+        <link rel="stylesheet" href="static/styles/4-common.css">
+        <link rel="stylesheet" href="static/styles/3-footer.css">
+        <link rel="stylesheet" href="static/styles/6-filters.css">
         <link rel="icon" href="https://s3.amazonaws.com/intranet-projects-files/holbertonschool-higher-level_programming+/268/icon.png">
     </head>
 
@@ -22,9 +22,9 @@
                     <ul class="popover">
                         {% for state in states|sort(attribute='name') %}
                         <li><h2>{{ state.name }}</h2>
-                            <ul class="popover_list">
+                            <ul class="items">
                                 {% for city in cities|sort(attribute='name') %}
-                                {% if city.id == state.id %}
+                                {% if city.state_id == state.id %}
                                 <li>{{ city.name }}</li>
                                 {% endif %}
                                 {% endfor %}
