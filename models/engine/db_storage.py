@@ -40,6 +40,8 @@ class DBStorage:
         result = {}
         clses = [v for k, v in models.classes.items() if "BaseModel" not in k]
         if cls is not None:
+            if isinstance(cls, str):
+                cls = models.classes[cls]
             clses = [cls]
         for c in clses:
             for instance in self.__session.query(c):
@@ -75,3 +77,10 @@ class DBStorage:
         Session = scoped_session(sessionmaker(bind=self.__engine,
                                  expire_on_commit=False))
         self.__session = Session()
+
+    def close(self):
+        '''
+            Removes current session
+        '''
+        scoped_session(sessionmaker(bind=self.__engine,
+                                 expire_on_commit=False)).remove()

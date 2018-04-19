@@ -21,6 +21,8 @@ class FileStorage:
         objs = {}
         if cls is None:
             return self.__objects
+        if isinstance(cls, str):
+            cls = models.classes[cls]
         for key, val in FileStorage.__objects.items():
             if cls.__name__ == val.__class__.__name__:
                 objs[key] = val
@@ -75,3 +77,9 @@ class FileStorage:
         if key in FileStorage.__objects:
             del FileStorage.__objects[key]
             self.save()
+
+    def close(self):
+        '''
+            Calls reload method
+        '''
+        self.reload()
